@@ -1,3 +1,5 @@
+import Vmasker from 'vanilla-masker'
+
 const mascara = (valor: any) => {
   //console.log(valor, tipo)
   let v: string = ''
@@ -15,13 +17,13 @@ const mascara = (valor: any) => {
   }
 
   if (tipo === 'peso') {
-    let _vp = 0
     v = valor.target.value.replace(/[^0-9]/g, '')
-    _vp = parseInt(v) % 10 == 0 ? parseInt(v) : parseInt(v) / 10
-    v = !isNaN(_vp) ? _vp.toString() : '0'
+    let vv = Vmasker(valor.target).maskPattern('99.99')
+
+    console.log(vv, 'vv')
   }
 
-  //console.log(v, v.length)
+  console.log(v, v.length)
   return v
 }
 

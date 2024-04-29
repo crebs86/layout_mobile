@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <div>Painel -> HomeView</div>
+  <div class="bg-red-300">Painel -> HomeView</div>
 </template>

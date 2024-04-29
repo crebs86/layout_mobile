@@ -27,9 +27,10 @@ onMounted(() => {
   <AsideComponent />
 
   <div class="sm:ml-64">
-    <div class="px-4 py-3 bg-blue-600 text-white dark:bg-slate-800 dark:text-gray-100 hidden sm:block">{{ $route.name }}
+    <div class="px-4 py-3 bg-gradient-to-t from-emerald-500 to-emerald-200 dark:from-teal-700 dark:to-teal-600 text-gray-800  dark:text-gray-100 hidden sm:block">{{ $route.name }}
     </div>
-    <div class="p-2 bg-slate-100 text-gray-900 dark:bg-slate-700 dark:text-gray-200 h-screen">
+    <!--div class="p-2 bg-slate-100 text-gray-900 dark:bg-slate-700 dark:text-gray-200 h-screen"-->
+    <div class="p-2 text-gray-900 dark:text-gray-200 h-screen">
       <main>
         <RouterView />
       </main>

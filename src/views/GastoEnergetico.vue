@@ -2,11 +2,12 @@
 import { ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import mascara from '@/mascaras';
+import Vmasker from 'vanilla-masker'
 
 const $toast = useToast();
 
 const calc = ref({
-  peso: 0,
+  peso: '',
   altura: 0,
   imc: 0,
   af: '',
@@ -131,6 +132,19 @@ function resetErros() {
   }
 }
 
+function mascararPeso(ev: any) {
+  let v = ev.target.value
+  var pSelector = document.querySelector('#peso');
+  if (v.length <= 3) {
+    Vmasker(pSelector).maskPattern('99.9')
+  } else if (v.length >= 4) {
+    Vmasker(pSelector).maskPattern('999.9');
+  }
+  setTimeout(() => {
+    calc.value.peso = ev.target.value
+  }, 50)
+}
+
 function mascarar(ev: any) {
   let mascarado = mascara(ev)
   let str = ev.target.getAttribute("data-model") + '=' + mascarado
@@ -185,8 +199,8 @@ function setClassificacaoImc() {
     <label for="peso" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
       Peso (Kg)
     </label>
-    <input type="tel" id="peso" v-model="calc.peso" @keyup="mascarar" data-tipo="peso" data-model="calc.value.peso"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+    <input type="text" id="peso" v-model="calc.peso" @keyup="mascararPeso" data-tipo="peso" data-model="calc.value.peso"
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
     <small class="text-red-700" v-if="erros.peso">Informe o peso em quilos</small>
   </div>
 
@@ -195,7 +209,7 @@ function setClassificacaoImc() {
       Altura (centimetros)
     </label>
     <input inputmode="numeric" @input="inputs" maxlength="3" data-tipo="altura"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
     <small class="text-red-700" v-if="erros.altura">Informe a altura centímetros</small>
   </div>
 
@@ -204,7 +218,7 @@ function setClassificacaoImc() {
       Idade (anos)
     </label>
     <input inputmode="numeric" @input="inputs" maxlength="2" data-tipo="idade"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
     <small class="text-red-700" v-if="erros.idade">Informe a idade em anos</small>
   </div>
 
@@ -214,7 +228,7 @@ function setClassificacaoImc() {
     </label>
 
     <select id="countries" v-model="calc.af"
-      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 
       <option></option>
       <option value="sedentario">Sedentário</option>
@@ -229,26 +243,26 @@ function setClassificacaoImc() {
     Sexo
   </p>
   <div
-    class="inline-flex space-x-4 px-4 py-3 border border-gray-300 dark:border-gray-600 bg-slate-50 dark:bg-gray-700 w-full rounded-md">
+    class="inline-flex space-x-4 px-4 py-3 border border-gray-300 dark:border-gray-600 bg-slate-50 dark:bg-teal-700 w-full rounded-md">
     <div class="flex items-center">
       <input id="masculino" type="radio" name="sexo" value="masculino" v-model="calc.sexo"
-        class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600">
+        class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-teal-400 dark:border-gray-600">
       <label for="masculino" class="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
         Masculino
       </label>
     </div>
     <div class="flex items-center">
       <input id="feminino" type="radio" name="sexo" value="feminino" v-model="calc.sexo"
-        class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-gray-700 dark:border-gray-600">
+        class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 dark:focus:ring-blue-600 dark:focus:bg-blue-600 dark:bg-teal-400 dark:border-gray-600">
       <label for="feminino" class="block ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">
         Feminino
       </label>
     </div>
     <small class="text-red-700" v-if="erros.sexo">Selecione o sexo</small>
   </div>
-  <div class="mt-4">
+  <div class="mt-4 flex justify-center">
     <button type="button" @click.prevent="calcular()"
-      class="text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+      class="text-white bg-gradient-to-r from-green-600 to-green-900 dark:from-cyan-500 dark:to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-11/12 max-w-96">
       Calcular
     </button>
   </div>

@@ -2,7 +2,7 @@
     <aside id="sidebar-multi-level-sidebar"
         class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0"
         aria-label="Sidebar">
-        <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div class="h-full px-3 py-4 overflow-y-auto bg-gradient-to-t from-emerald-500 to-emerald-200 dark:from-teal-700 dark:to-teal-600">
             <ul class="space-y-2 font-medium">
                 <li>
                     <RouterLink to="/" data-drawer-target="sidebar-multi-level-sidebar"
