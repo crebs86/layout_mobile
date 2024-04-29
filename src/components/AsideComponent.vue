@@ -5,7 +5,8 @@
         <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
             <ul class="space-y-2 font-medium">
                 <li>
-                    <RouterLink to="/"
+                    <RouterLink to="/" data-drawer-target="sidebar-multi-level-sidebar"
+                        data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
@@ -45,7 +46,9 @@
                     </button>
                     <ul id="dropdown-example" class="hidden py-2 space-y-2">
                         <li>
-                            <RouterLink to="/GastoEnergetico"
+                            <RouterLink to="/GastoEnergetico" data-drawer-target="sidebar-multi-level-sidebar"
+                                data-drawer-toggle="sidebar-multi-level-sidebar"
+                                aria-controls="sidebar-multi-level-sidebar"
                                 class="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
                                 Gasto Energético
                             </RouterLink>
@@ -59,7 +62,8 @@
                 </li>
 
                 <li>
-                    <RouterLink to="/about"
+                    <RouterLink to="/about" data-drawer-target="sidebar-multi-level-sidebar"
+                        data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar"
                         class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="w-6 h-6 text-gray-500 dark:text-white" aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
