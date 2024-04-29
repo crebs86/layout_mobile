@@ -11,6 +11,12 @@ const router = createRouter({
       component: Dashboard
     },
     {
+      path: '/GastoEnergetico',
+      name: 'Gasto Energético',
+
+      component: () => import('../views/GastoEnergetico.vue')
+    },
+    {
       path: '/about',
       name: 'About',
       // route level code-splitting

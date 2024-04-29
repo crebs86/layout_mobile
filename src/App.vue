@@ -27,8 +27,9 @@ onMounted(() => {
   <AsideComponent />
 
   <div class="sm:ml-64">
-    <div class="px-4 py-3 bg-blue-600 text-white hidden md:block">{{ $route.name }}</div>
-    <div class="p-2 bg-slate-100 h-screen ">
+    <div class="px-4 py-3 bg-blue-600 text-white dark:bg-slate-800 dark:text-gray-100 hidden sm:block">{{ $route.name }}
+    </div>
+    <div class="p-2 bg-slate-100 text-gray-900 dark:bg-slate-700 dark:text-gray-200 h-screen">
       <main>
         <RouterView />
       </main>
@@ -37,4 +38,4 @@ onMounted(() => {
 
 </template>
 
-<style scoped></style>./components/AsideComponent.vue
+<style scoped></style>
