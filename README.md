@@ -1,2 +1,2 @@
 # layout_mobile
-Layout base para mobile
+Novo Aplicativo Nutrix
