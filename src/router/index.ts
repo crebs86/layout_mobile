@@ -17,6 +17,12 @@ const router = createRouter({
       component: () => import('../views/GastoEnergetico.vue')
     },
     {
+      path: '/imc',
+      name: 'IMC',
+
+      component: () => import('../views/IMC.vue')
+    },
+    {
       path: '/about',
       name: 'About',
       // route level code-splitting
