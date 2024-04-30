@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
-import mascara from '@/mascaras';
-import Vmasker from 'vanilla-masker'
+import * as smask from "smask";
 
 const $toast = useToast();
 
@@ -27,30 +26,34 @@ const erros = ref({
 const atividadeFisica = {
   feminino: {
     eutrofico: {
-      sedentario: 1,
-      atividade_leve: 1.12,
-      atividade_moderada: 1.27,
-      atividade_intensa: 1.45
+      "vazio": 0,
+      "sedentario": 1,
+      "atividade_leve": 1.12,
+      "atividade_moderada": 1.27,
+      "atividade_intensa": 1.45
     },
     sobrepeso: {
-      sedentario: 1,
-      atividade_leve: 1.16,
-      atividade_moderada: 1.27,
-      atividade_intensa: 1.44
+      "vazio": 0,
+      "sedentario": 1,
+      "atividade_leve": 1.16,
+      "atividade_moderada": 1.27,
+      "atividade_intensa": 1.44
     }
   },
   masculino: {
     eutrofico: {
-      sedentario: 1,
-      atividade_leve: 1.11,
-      atividade_moderada: 1.25,
-      atividade_intensa: 1.48
+      "vazio": 0,
+      "sedentario": 1,
+      "atividade_leve": 1.11,
+      "atividade_moderada": 1.25,
+      "atividade_intensa": 1.48
     },
     sobrepeso: {
-      sedentario: 1,
-      atividade_leve: 1.12,
-      atividade_moderada: 1.29,
-      atividade_intensa: 1.59
+      "vazio": 0,
+      "sedentario": 1,
+      "atividade_leve": 1.12,
+      "atividade_moderada": 1.29,
+      "atividade_intensa": 1.59
     }
   }
 }
@@ -58,7 +61,7 @@ const atividadeFisica = {
 function calcular() {
   resetErros();
   if (calc.value.peso && calc.value.altura && calc.value.af && calc.value.sexo) {
-    calc.value.imc = calcIMC(calc.value.peso, calc.value.altura)
+    calc.value.imc = calcIMC(parseFloat(calc.value.peso), calc.value.altura)
     calc.value.kcal = calcENE()
   } else {
     showErros()
@@ -72,21 +75,25 @@ function calcIMC(peso: number, altura: number): number {
 function calcENE() {
   if (calc.value.imc >= 18.5 && calc.value.imc < 25) {
     if (calc.value.sexo == 'masculino') {
-      let pa = atividadeFisica['masculino']['eutrofico'][calc.value.af]
+      //@ts-ignore
+      let pa = atividadeFisica.masculino.eutrofico[calc.value.af]
       return ((662 - (9.53 * calc.value.idade)) +
-        (pa * (((15.91 * calc.value.peso) + (539.6 * calc.value.altura / 100)))));
+        (pa * (((15.91 * parseFloat(calc.value.peso)) + (539.6 * calc.value.altura / 100)))));
     } else if (calc.value.sexo == 'feminino') {
-      let pa = atividadeFisica['feminino']['eutrofico'][calc.value.af]
-      return ((354 - (6.91 * calc.value.idade)) + (pa * (((9.36 * calc.value.peso) + (726 * calc.value.altura / 100)))));
+      //@ts-ignore
+      let pa = atividadeFisica.feminino.eutrofico[calc.value.af]
+      return ((354 - (6.91 * calc.value.idade)) + (pa * (((9.36 * parseFloat(calc.value.peso)) + (726 * calc.value.altura / 100)))));
     }
   } else {
     if (calc.value.sexo == 'masculino') {
-      let pa = atividadeFisica['masculino']['sobrepeso'][calc.value.af]
+      //@ts-ignore
+      let pa = atividadeFisica.masculino.sobrepeso[calc.value.af]
       return ((1086 - (10.1 * calc.value.idade)) +
-        (pa * (((13.7 * calc.value.peso) + (416 * calc.value.altura / 100)))));
+        (pa * (((13.7 * parseFloat(calc.value.peso)) + (416 * calc.value.altura / 100)))));
     } else if (calc.value.sexo == 'feminino') {
-      let pa = atividadeFisica['feminino']['sobrepeso'][calc.value.af]
-      return ((448 - (7.95 * calc.value.idade)) + (pa * (((11.4 * calc.value.peso) + (619 * calc.value.altura / 100)))));
+      //@ts-ignore
+      let pa = atividadeFisica.feminino.sobrepeso[calc.value.af]
+      return ((448 - (7.95 * calc.value.idade)) + (pa * (((11.4 * parseFloat(calc.value.peso)) + (619 * calc.value.altura / 100)))));
     }
   }
   return 0;
@@ -132,23 +139,14 @@ function resetErros() {
   }
 }
 
-function mascararPeso(ev: any) {
-  let v = ev.target.value
-  var pSelector = document.querySelector('#peso');
-  if (v.length <= 3) {
-    Vmasker(pSelector).maskPattern('99.9')
-  } else if (v.length >= 4) {
-    Vmasker(pSelector).maskPattern('999.9');
-  }
-  setTimeout(() => {
-    calc.value.peso = ev.target.value
-  }, 50)
-}
+function mascararPeso() {
+  calc.value.peso = calc.value.peso.replace(/[^0-9]/g, '')
 
-function mascarar(ev: any) {
-  let mascarado = mascara(ev)
-  let str = ev.target.getAttribute("data-model") + '=' + mascarado
-  eval(str)
+  if (calc.value.peso.length > 4) {
+    calc.value.peso = calc.value.peso.slice(0, -1)
+  }
+  calc.value.peso = smask.mask(calc.value.peso, ["dd", "dd.d", "ddd.d"])
+
 }
 
 function inputs(ev: any) {
@@ -194,7 +192,6 @@ function setClassificacaoImc() {
   <h1>
     Calculadora de Estimativa de Necessidade Energética 19 anos ou Mais
   </h1>
-
   <div class="mt-4">
     <label for="peso" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
       Peso (Kg)
