@@ -23,6 +23,12 @@ const router = createRouter({
       component: () => import('../views/IMC.vue')
     },
     {
+      path: '/tabela-dos-alimentos',
+      name: 'Tabela dos Alimentos',
+
+      component: () => import('../views/TabelaAlimentos.vue')
+    },
+    {
       path: '/about',
       name: 'About',
       // route level code-splitting

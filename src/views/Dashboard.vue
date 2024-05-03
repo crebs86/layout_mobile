@@ -18,10 +18,12 @@
       </RouterLink>
     </div>
     <div class="">
-      <button
-        class="px-1 w-32 min-h-20 h-auto border-2 rounded-full border-teal-600 bg-green-300 dark:bg-teal-900/50 text-xs flex items-center justify-center">
-        Tabela Alimentos
-      </button>
+      <RouterLink to="/tabela-dos-alimentos">
+        <button
+          class="px-1 w-32 min-h-20 h-auto border-2 rounded-full border-teal-600 bg-green-300 dark:bg-teal-900/50 text-xs flex items-center justify-center">
+          Tabela Alimentos
+        </button>
+      </RouterLink>
     </div>
     <div class="">
       <button
