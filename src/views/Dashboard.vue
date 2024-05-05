@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div class="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-[550px] place-items-center">
     <div class="">

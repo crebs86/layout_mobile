@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue';
 import { useToast } from 'vue-toast-notification';
 import * as smask from "smask";
@@ -25,7 +25,7 @@ function calcular() {
   }
 }
 
-function calcIMC(peso: number, altura: number): number {
+function calcIMC(peso, altura) {
   return peso / ((altura / 100) * (altura / 100))
 }
 
@@ -60,7 +60,7 @@ function mascararPeso() {
 
 }
 
-function inputs(ev: any) {
+function inputs(ev) {
   ev.target.value = ev.target.value.replace(/\D+/g, '')
   calc.value.altura = ev.target.value
 }
@@ -102,7 +102,7 @@ function setClassificacaoImc() {
     <label for="peso" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
       Peso (Kg)
     </label>
-    <input type="text" id="peso" v-model="calc.peso" @keyup="mascararPeso" data-tipo="peso" data-model="calc.value.peso"
+    <input type="number" id="peso" v-model="calc.peso" @keyup="mascararPeso" data-tipo="peso" data-model="calc.value.peso"
       class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
     <small class="text-red-700" v-if="erros.peso">Informe o peso em quilos</small>
   </div>
