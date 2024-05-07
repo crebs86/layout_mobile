@@ -22,7 +22,7 @@ const router = createRouter({
       component: () => import('../views/IMC.vue')
     },
     {
-      path: '/tabela-dos-alimentos',
+      path: '/TabelaAlimentos',
       name: 'Tabela dos Alimentos',
 
       component: () => import('../views/TabelaAlimentos.vue')
