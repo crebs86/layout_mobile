@@ -1,13 +1,17 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, onUpdated, ref } from 'vue';
 import { initFlowbite } from 'flowbite';
-import { RouterView } from 'vue-router';
+import { RouterView, useRouter } from 'vue-router';
 import AsideComponent from './components/AsideComponent.vue';
 import { App } from '@capacitor/app'
 import { useRoute } from 'vue-router';
+import has from '@/arrayHelpers'
+import api from '@/api';
 
 const route = useRoute()
+const router = useRouter()
 const modalAberto = ref(false)
+const rotasLivres = ['/', '/login', '/TabelaAlimentos', '/imcs', '/about', '/GastoEnergetico']
 
 onMounted(() => {
   initFlowbite();
@@ -20,12 +24,49 @@ onMounted(() => {
   })
 })
 
+onUpdated(() => {
+  //console.log(localStorage.getItem('ses_token'))
+  verificarLoginSeRotaProtegida()
+})
+
 function sair(sair = false) {
   if (sair) {
     App.exitApp()
   } else {
     modalAberto.value = false
   }
+}
+
+async function verificarLoginSeRotaProtegida() {
+  if (has(rotasLivres, [route.path])) {
+    console.log(`Rota ${route.path} livre`)
+  } else {
+    console.log(`Rota ${route.path} protegida`)
+
+    if (!verificarToken()) {
+      console.log('sem token')
+      router.push('/login')
+    }
+    if (!verificarLogin()) {
+      localStorage.setItem('ses_token', null)
+      router.push('/login')
+    }
+  }
+}
+
+function verificarToken() {
+  return localStorage.getItem('ses_token') !== null
+}
+
+function verificarLogin() {
+  var auth = false;
+  api.get('/check')
+    .then((r) => {
+      auth = r.data
+      console.log('api then App', auth.auth)
+    })
+    .catch()
+  return auth
 }
 
 </script>
