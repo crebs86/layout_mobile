@@ -20,35 +20,36 @@ onBeforeMount(() => {
 });
 
 async function tentarLogin() {
-    console.log('try login', localStorage.getItem('ses_token'))
+    console.log('tentar login', JSON.parse(localStorage.getItem('ses_token')) === null)
     //try {
-        if (localStorage.getItem('ses_token')) {
-            console.log('if localstorage')
-            var auth;
-            await api.get('/check')
-                .then((r) => {
-                    auth = r.data
-                    console.log('api then', auth)
-                })
-                .catch()
-            if (auth.auth) {
-                console.log('if auth', auth)
-                setTimeout(() => {
-                    router.push('/'),
-                        500
-                })
-            } else {
-                console.log('else ses_token null')
-                nao_logado.value = false
-                localStorage.setItem('ses_token', null)
-            }
+    if (localStorage.getItem('ses_token') != 'null') {
+        console.log('if possui token', JSON.parse(localStorage.getItem('ses_token')))
+        var auth;
+        await api.get('/check')
+            .then((r) => {
+                auth = r.data
+                console.log('api then', auth)
+            })
+            .catch()
+        if (auth.auth) {
+            console.log('if token faz login', auth)
+            setTimeout(() => {
+                router.push('/'),
+                    500
+            })
         } else {
+            console.log('else ses_token set null')
             nao_logado.value = false
+            localStorage.setItem('ses_token', JSON.stringify(null))
         }
-   /* } catch (e) {
-        //console.log(e)
-        //console.log(e?.response?.data.message)
-    }/** */
+    } else {
+        console.log('não possui token')
+        nao_logado.value = false
+    }
+    /* } catch (e) {
+         //console.log(e)
+         //console.log(e?.response?.data.message)
+     }/** */
 }
 
 const postLogin = async () => {
@@ -65,6 +66,9 @@ const postLogin = async () => {
                     router.push('/'),
                         500
                 })
+            })
+            .catch(() => {
+                console.log('erro login')
             })
 
     } catch (error) {

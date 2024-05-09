@@ -48,14 +48,14 @@ async function verificarLoginSeRotaProtegida() {
       router.push('/login')
     }
     if (!verificarLogin()) {
-      localStorage.setItem('ses_token', null)
+      localStorage.setItem('ses_token', JSON.stringify(null))
       router.push('/login')
     }
   }
 }
 
 function verificarToken() {
-  return localStorage.getItem('ses_token') !== null
+  return JSON.parse(localStorage.getItem('ses_token')) !== null
 }
 
 function verificarLogin() {
