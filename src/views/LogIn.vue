@@ -20,32 +20,33 @@ onBeforeMount(() => {
 });
 
 async function tentarLogin() {
-    console.log('tentar login', JSON.parse(localStorage.getItem('ses_token')) === null)
+    //console.log('tentar login', localStorage.getItem('ses_token'))
     //try {
-    if (localStorage.getItem('ses_token') != 'null') {
-        console.log('if possui token', JSON.parse(localStorage.getItem('ses_token')))
-        var auth;
-        await api.get('/check')
-            .then((r) => {
-                auth = r.data
-                console.log('api then', auth)
-            })
-            .catch()
-        if (auth.auth) {
-            console.log('if token faz login', auth)
-            setTimeout(() => {
-                router.push('/'),
-                    500
-            })
-        } else {
-            console.log('else ses_token set null')
-            nao_logado.value = false
-            localStorage.setItem('ses_token', JSON.stringify(null))
-        }
+    /*if (localStorage.getItem('ses_token') != 'null') {
+        console.log('if possui token', localStorage.getItem('ses_token'))
+        /** */
+    var auth = 0;
+    await api.get('/check')
+        .then((r) => {
+            auth = r.data
+            console.log('api then', auth)
+        })
+        .catch()
+    if (auth === 1) {
+        console.log('if check login', auth === 1)
+        setTimeout(() => {
+            router.push('/'),
+                500
+        })
     } else {
+        console.log('else ses_token set null')
+        nao_logado.value = false
+        //localStorage.removeItem('ses_token')
+    }
+    /*} else {
         console.log('não possui token')
         nao_logado.value = false
-    }
+    }/** */
     /* } catch (e) {
          //console.log(e)
          //console.log(e?.response?.data.message)

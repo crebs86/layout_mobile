@@ -25,7 +25,6 @@ onMounted(() => {
 })
 
 onUpdated(() => {
-  //console.log(localStorage.getItem('ses_token'))
   verificarLoginSeRotaProtegida()
 })
 
@@ -43,30 +42,25 @@ async function verificarLoginSeRotaProtegida() {
   } else {
     console.log(`Rota ${route.path} protegida`)
 
-    if (!verificarToken()) {
-      console.log('sem token')
-      router.push('/login')
-    }
     if (!verificarLogin()) {
-      localStorage.setItem('ses_token', JSON.stringify(null))
+      console.log('rota protegida sem login. redirecionar')
       router.push('/login')
     }
   }
 }
 
-function verificarToken() {
-  return JSON.parse(localStorage.getItem('ses_token')) !== null
-}
-
-function verificarLogin() {
+async function verificarLogin() {
   var auth = false;
-  api.get('/check')
+  await api.get('/check')
     .then((r) => {
       auth = r.data
-      console.log('api then App', auth.auth)
+      console.log('api then App', auth === 1)
+      return auth === 1
     })
-    .catch()
-  return auth
+    .catch(() => {
+      return false
+    })
+  //return auth === 1
 }
 
 </script>
