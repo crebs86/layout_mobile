@@ -1,4 +1,7 @@
 import axios from "axios";
+import Cookies from "js-cookie";
+
+const ses_token = Cookies.get("ses_token");
 
 let host = "";
 
@@ -20,7 +23,8 @@ api.defaults.headers.put["Access-Control-Allow-Origin"] = "*";
 api.defaults.headers.get["Access-Control-Allow-Origin"] = "*";
 api.defaults.headers.delete["Access-Control-Allow-Origin"] = "*";
 api.defaults.headers.common = {
-  'Authorization': "Bearer " + localStorage.getItem('ses_token')
+  Authorization: "Bearer " + ses_token,
+  Accept: "application/json",
 }; /** */
 
 export default api;

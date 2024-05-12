@@ -3,6 +3,7 @@ import { onBeforeMount, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import api from '@/api';
+import Cookies from 'js-cookie';
 
 const login = ref({
     email: 'crebs@crebs.dev',
@@ -19,37 +20,41 @@ onBeforeMount(() => {
     tentarLogin()
 });
 
+function redirecionarSeLogado() {
+    setTimeout(() => {
+        router.push('/'),
+            500
+    })
+}
+
 async function tentarLogin() {
-    //console.log('tentar login', localStorage.getItem('ses_token'))
+    console.log('try login', Cookies.get('ses_token'))
     try {
-        /*if (localStorage.getItem('ses_token') != 'null') {
-            console.log('if possui token', localStorage.getItem('ses_token'))
-            /** */
-        var auth = 0;
-        await api.get('/check')
-            .then((r) => {
-                auth = r.data
-                console.log('api then', auth)
-            })
-            .catch((e) => {
-                console.log('Erro: ', e?.response?.status)
-            })
-        if (auth === 1) {
-            console.log('if check login', auth === 1)
-            setTimeout(() => {
-                router.push('/'),
-                    500
-            })
+        if (Cookies.get('ses_token')) {
+            console.log('if cookie')
+            var auth;
+            await api.get('/check')
+                .then((r) => {
+                    auth = r.data
+                    console.log('api then', auth)
+                })
+                .catch((e) => {
+                    console.log(e.response)
+                    nao_logado.value = false
+                })
+            if (auth === 1) {
+                console.log('if auth', auth === 1, 'redireciona se logado')
+                redirecionarSeLogado()
+            } else {
+                console.log('else ses_token null', auth)
+                nao_logado.value = false
+                Cookies.remove('ses_token')
+            }
         } else {
-            console.log('else não logado')
             nao_logado.value = false
-            //localStorage.removeItem('ses_token')
         }
-        /*} else {
-            console.log('não possui token')
-            nao_logado.value = false
-        }/** */
     } catch (e) {
+        nao_logado.value = false
         //console.log(e)
         //console.log(e?.response?.data.message)
     }/** */
@@ -57,26 +62,23 @@ async function tentarLogin() {
 
 const postLogin = async () => {
     console.log('postLogin')
+    nao_logado.value = true
     try {
         await api.post('/login', {
             email: login.value.email,
-            password: login.value.password,
-            //remember: login.value.remember
+            password: login.value.password
         })
             .then(auth => {
-                localStorage.setItem('ses_token', auth.data.ses_token)
-                setTimeout(() => {
-                    router.push('/'),
-                        500
-                })
-            })
-            .catch(() => {
-                console.log('erro login')
+                console.log(auth.data)
+                Cookies.set('ses_token', auth.data.authorization.token)
+                nao_logado.value = false
+                redirecionarSeLogado()
             })
 
     } catch (error) {
         // console.log(error?.response?.data)
         console.log(error)
+        nao_logado.value = false
     }
 }
 
@@ -97,13 +99,13 @@ const postLogin = async () => {
             <input type="password" id="Senha" v-model="login.password"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
         </div>
-        <div class="flex mt-1">
+        <!--div class="flex mt-1">
             <label for="E-mail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                 Lembrar de min
             </label>
             <input type="checkbox" id="E-mail" v-model="login.remember"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-1" />
-        </div>
+        </div-->
         <div class="mt-4 flex justify-center">
             <button type="button" @click.prevent="postLogin"
                 class="text-white bg-gradient-to-r from-green-600 to-green-900 dark:from-cyan-500 dark:to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 w-11/12 max-w-96">

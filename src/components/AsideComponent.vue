@@ -1,3 +1,35 @@
+<script setup>
+import Cookies from 'js-cookie';
+import { useStore } from 'vuex';
+import api from '../api.js';
+import { useRouter } from 'vue-router';
+
+const store = useStore();
+const router = useRouter();
+
+function sair() {
+    console.log('sair')
+    store.commit('storeLoading', true);
+    try {
+        api.post('/logout')
+            .then((r) => {
+                processarSaida()
+            })
+            .catch((e) => {
+                //processarSaida()
+            })
+    } catch (e) {
+        //processarSaida()
+    }
+
+}
+
+function processarSaida() {
+    Cookies.remove('ses_token')
+    store.commit('storeLoading', false);
+    router.push('/login')
+}
+</script>
 <template>
     <aside id="sidebar-multi-level-sidebar"
         class="fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0 md:hidden"
@@ -64,8 +96,8 @@
                 </li>
 
                 <li>
-                    <RouterLink to="/TabelaAlimentos"
-                        data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar"
+                    <RouterLink to="/TabelaAlimentos" data-drawer-toggle="sidebar-multi-level-sidebar"
+                        aria-controls="sidebar-multi-level-sidebar"
                         class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                             height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -76,7 +108,7 @@
                         <span class="flex-1 ms-3 whitespace-nowrap">Tabela do Alimentos</span>
                     </RouterLink>
                 </li>
-                <li>
+                <li v-if="!Cookies.get('ses_token')">
                     <RouterLink to="/login" data-drawer-target="sidebar-multi-level-sidebar"
                         data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar"
                         class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -86,8 +118,21 @@
                                 d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2" />
                         </svg>
 
-                        <span class="flex-1 ms-3 whitespace-nowrap">Login</span>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Entrar</span>
                     </RouterLink>
+                </li>
+                <li class="cursor-pointer" v-else>
+                    <a @click.prevent="sair()" data-drawer-target="sidebar-multi-level-sidebar"
+                        data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar"
+                        class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
+                        </svg>
+
+                        <span class="flex-1 ms-3 whitespace-nowrap">Sair</span>
+                    </a>
                 </li>
                 <li>
                     <RouterLink to="/about" data-drawer-target="sidebar-multi-level-sidebar"
@@ -171,7 +216,7 @@
                         <span class="flex-1 ms-3 whitespace-nowrap">Tabela do Alimentos</span>
                     </RouterLink>
                 </li>
-                <li>
+                <li v-if="!Cookies.get('ses_token')">
                     <RouterLink to="/login"
                         class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -179,8 +224,19 @@
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 12H4m12 0-4 4m4-4-4-4m3-4h2a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2" />
                         </svg>
-                        <span class="flex-1 ms-3 whitespace-nowrap">Login</span>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Entrar</span>
                     </RouterLink>
+                </li>
+                <li class="cursor-pointer" v-else>
+                    <a @click.prevent="sair()"
+                        class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20 12H8m12 0-4 4m4-4-4-4M9 4H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h2" />
+                        </svg>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Sair</span>
+                    </a>
                 </li>
                 <li>
                     <RouterLink to="/about"
