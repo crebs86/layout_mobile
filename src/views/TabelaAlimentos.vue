@@ -18,6 +18,7 @@ async function buscar() {
       position: 'top-right'
     })
   } else {
+    alimentos.value = []
     status.value = true
     await api.get('/nutrix/alimentoFiltro/' + filtro.value)
       .then((data) => {
@@ -39,7 +40,7 @@ async function buscar() {
     </button>
   </div>
 
-  <div role="status" v-if="alimentos.length === 0 && status"
+  <div role="status" v-if="alimentos.length === 0 && status || status"
     class="w-full p-4 space-y-4 border border-gray-200 divide-y divide-gray-200 rounded shadow animate-pulse dark:divide-gray-700 md:p-6 dark:border-gray-700 mt-4">
     <div class="flex items-center justify-between">
       <div>

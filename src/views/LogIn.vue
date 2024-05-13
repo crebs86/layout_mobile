@@ -22,7 +22,7 @@ onBeforeMount(() => {
 
 function redirecionarSeLogado() {
     setTimeout(() => {
-        router.push('/'),
+        router.push('/AfterLogin'),
             500
     })
 }
@@ -71,8 +71,10 @@ const postLogin = async () => {
             .then(auth => {
                 console.log(auth.data)
                 Cookies.set('ses_token', auth.data.authorization.token)
-                nao_logado.value = false
-                redirecionarSeLogado()
+                setTimeout(() => {
+                    redirecionarSeLogado()
+                    nao_logado.value = false
+                }, 1000)
             })
 
     } catch (error) {

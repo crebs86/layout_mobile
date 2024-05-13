@@ -14,7 +14,6 @@ const route = useRoute()
 const router = useRouter()
 const store = useStore();
 const modalAberto = ref(false)
-const rotasLivres = ['/', '/login', '/TabelaAlimentos', '/imc', '/about', '/GastoEnergetico']
 
 onMounted(() => {
   initFlowbite();
@@ -26,56 +25,6 @@ onMounted(() => {
     }
   })
 })
-
-onUpdated(() => {
-  verificarLoginSeRotaProtegida()
-})
-
-function sair(sair = false) {
-  if (sair) {
-    App.exitApp()
-  } else {
-    modalAberto.value = false
-  }
-}
-
-async function verificarLoginSeRotaProtegida() {
-  if (has(rotasLivres, [route.path])) {
-    console.log(`Rota ${route.path} livre`)
-  } else {
-    console.log(`Rota ${route.path} protegida`)
-
-    if (!verificarToken()) {
-      console.log('sem token')
-      router.push('/login')
-    }
-    verificarLogin()
-  }
-}
-
-function verificarToken() {
-  return Cookies.get('ses_token') !== null
-}
-
-function verificarLogin() {
-  try {
-    api.get('/check')
-      .then((r) => {
-        console.log('api then App', r.data === 1)
-      })
-      .catch(() => {
-        console.log('.catch redirect /login')
-        Cookies.remove('ses_token')
-        router.push('/login')
-      }
-      )
-  }
-  catch (e) {
-    console.log('catch redirect /login')
-    Cookies.remove('ses_token')
-    router.push('/login')
-  }
-}
 
 </script>
 

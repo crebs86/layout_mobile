@@ -17,9 +17,11 @@ function sair() {
             })
             .catch((e) => {
                 //processarSaida()
+                store.commit('storeLoading', false);
             })
     } catch (e) {
         //processarSaida()
+        store.commit('storeLoading', false);
     }
 
 }
@@ -27,7 +29,7 @@ function sair() {
 function processarSaida() {
     Cookies.remove('ses_token')
     store.commit('storeLoading', false);
-    router.push('/login')
+    window.location.replace('/login')
 }
 </script>
 <template>
@@ -108,7 +110,7 @@ function processarSaida() {
                         <span class="flex-1 ms-3 whitespace-nowrap">Tabela do Alimentos</span>
                     </RouterLink>
                 </li>
-                <li v-if="!Cookies.get('ses_token')">
+                <li v-if="!Cookies.get('ses_token') || Cookies.get('ses_token') === 'undefinied'">
                     <RouterLink to="/login" data-drawer-target="sidebar-multi-level-sidebar"
                         data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar"
                         class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
@@ -216,7 +218,7 @@ function processarSaida() {
                         <span class="flex-1 ms-3 whitespace-nowrap">Tabela do Alimentos</span>
                     </RouterLink>
                 </li>
-                <li v-if="!Cookies.get('ses_token')">
+                <li v-if="!Cookies.get('ses_token') || Cookies.get('ses_token') === 'undefinied'">
                     <RouterLink to="/login"
                         class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
