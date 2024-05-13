@@ -17,7 +17,7 @@ const router = createRouter({
       component: () => import("../views/GastoEnergetico.vue"),
     },
     {
-      path: "/imc",
+      path: "/Imc",
       name: "IMC",
 
       component: () => import("../views/IMC.vue"),
@@ -29,7 +29,7 @@ const router = createRouter({
       component: () => import("../views/TabelaAlimentos.vue"),
     },
     {
-      path: "/about",
+      path: "/About",
       name: "About",
       // route level code-splitting
       // this generates a separate chunk (About.[hash].js) for this route
@@ -37,7 +37,7 @@ const router = createRouter({
       component: () => import("../views/AboutView.vue"),
     },
     {
-      path: "/login",
+      path: "/Login",
       name: "LogIn",
       component: () => import("../views/LogIn.vue"),
     },
@@ -47,9 +47,33 @@ const router = createRouter({
       component: () => import("../views/AfterLogin.vue"),
     },
     {
-      path: "/atendimentos",
+      path: "/Atendimentos",
       name: "Atendimentos",
       component: () => import("../views/Atendimentos/Index.vue"),
+      beforeEnter: Guard.auth,
+    },
+    {
+      path: "/Atendimentos/Novo",
+      name: "Novo Atendimento",
+      component: () => import("../views/Atendimentos/NovoAtendimento.vue"),
+      beforeEnter: Guard.auth,
+    },
+    {
+      path: "/Atendimentos/NovoPaciente",
+      name: "Novo Paciente",
+      component: () => import("../views/Atendimentos/NovoPaciente.vue"),
+      beforeEnter: Guard.auth,
+    },
+    {
+      path: "/Atendimentos/Paciente/:id",
+      name: "Paciente",
+      component: () => import("../views/Atendimentos/Paciente.vue"),
+      beforeEnter: Guard.auth,
+    },
+    {
+      path: "/Atendimentos/Pacientes",
+      name: "Pacientes",
+      component: () => import("../views/Atendimentos/Pacientes.vue"),
       beforeEnter: Guard.auth,
     },
   ],

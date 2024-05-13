@@ -86,7 +86,7 @@ function processarSaida() {
                             </RouterLink>
                         </li>
                         <li>
-                            <RouterLink to="/imc"
+                            <RouterLink to="/Imc"
                                 class="flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:hover:bg-gray-700"
                                 data-drawer-target="sidebar-multi-level-sidebar"
                                 data-drawer-toggle="sidebar-multi-level-sidebar"
@@ -110,6 +110,23 @@ function processarSaida() {
                         <span class="flex-1 ms-3 whitespace-nowrap">Tabela do Alimentos</span>
                     </RouterLink>
                 </li>
+
+                <li>
+                    <RouterLink to="/Atendimentos" data-drawer-toggle="sidebar-multi-level-sidebar"
+                        aria-controls="sidebar-multi-level-sidebar"
+                        class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path fill-rule="evenodd"
+                                d="M11 4.717c-2.286-.58-4.16-.756-7.045-.71A1.99 1.99 0 0 0 2 6v11c0 1.133.934 2.022 2.044 2.007 2.759-.038 4.5.16 6.956.791V4.717Zm2 15.081c2.456-.631 4.198-.829 6.956-.791A2.013 2.013 0 0 0 22 16.999V6a1.99 1.99 0 0 0-1.955-1.993c-2.885-.046-4.76.13-7.045.71v15.081Z"
+                                clip-rule="evenodd" />
+                        </svg>
+
+                        <span class="flex-1 ms-3 whitespace-nowrap">Atendimentos</span>
+                    </RouterLink>
+                </li>
+
                 <li v-if="!Cookies.get('ses_token') || Cookies.get('ses_token') === 'undefinied'">
                     <RouterLink to="/login" data-drawer-target="sidebar-multi-level-sidebar"
                         data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar"
@@ -137,7 +154,7 @@ function processarSaida() {
                     </a>
                 </li>
                 <li>
-                    <RouterLink to="/about" data-drawer-target="sidebar-multi-level-sidebar"
+                    <RouterLink to="/About" data-drawer-target="sidebar-multi-level-sidebar"
                         data-drawer-toggle="sidebar-multi-level-sidebar" aria-controls="sidebar-multi-level-sidebar"
                         class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -199,7 +216,7 @@ function processarSaida() {
                             </RouterLink>
                         </li>
                         <li>
-                            <RouterLink to="/imc"
+                            <RouterLink to="/Imc"
                                 class="flex items-center w-full p-2 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:hover:bg-gray-700">
                                 IMC
                             </RouterLink>
@@ -216,6 +233,20 @@ function processarSaida() {
                                 clip-rule="evenodd" />
                         </svg>
                         <span class="flex-1 ms-3 whitespace-nowrap">Tabela do Alimentos</span>
+                    </RouterLink>
+                </li>
+                <li>
+                    <RouterLink to="/Atendimentos"
+                        class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
+                            viewBox="0 0 24 24">
+                            <path fill-rule="evenodd"
+                                d="M11 4.717c-2.286-.58-4.16-.756-7.045-.71A1.99 1.99 0 0 0 2 6v11c0 1.133.934 2.022 2.044 2.007 2.759-.038 4.5.16 6.956.791V4.717Zm2 15.081c2.456-.631 4.198-.829 6.956-.791A2.013 2.013 0 0 0 22 16.999V6a1.99 1.99 0 0 0-1.955-1.993c-2.885-.046-4.76.13-7.045.71v15.081Z"
+                                clip-rule="evenodd" />
+                        </svg>
+
+                        <span class="flex-1 ms-3 whitespace-nowrap">Atendimentos</span>
                     </RouterLink>
                 </li>
                 <li v-if="!Cookies.get('ses_token') || Cookies.get('ses_token') === 'undefinied'">
@@ -241,7 +272,7 @@ function processarSaida() {
                     </a>
                 </li>
                 <li>
-                    <RouterLink to="/about"
+                    <RouterLink to="/About"
                         class="flex items-center p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
                             height="24" fill="currentColor" viewBox="0 0 24 24">

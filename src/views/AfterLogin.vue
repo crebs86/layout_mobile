@@ -4,7 +4,7 @@ import { onMounted } from "vue";
 onMounted(() => {
     setTimeout(() => {
         window.location.replace('/')
-    }, 1500)
+    }, 500)
 })
 </script>
 <template>

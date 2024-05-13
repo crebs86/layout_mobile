@@ -75,23 +75,19 @@ function calcIMC(peso, altura) {
 function calcENE() {
   if (calc.value.imc >= 18.5 && calc.value.imc < 25) {
     if (calc.value.sexo == 'masculino') {
-      //@ts-ignore
       let pa = atividadeFisica.masculino.eutrofico[calc.value.af]
       return ((662 - (9.53 * calc.value.idade)) +
         (pa * (((15.91 * parseFloat(calc.value.peso)) + (539.6 * calc.value.altura / 100)))));
     } else if (calc.value.sexo == 'feminino') {
-      //@ts-ignore
       let pa = atividadeFisica.feminino.eutrofico[calc.value.af]
       return ((354 - (6.91 * calc.value.idade)) + (pa * (((9.36 * parseFloat(calc.value.peso)) + (726 * calc.value.altura / 100)))));
     }
   } else {
     if (calc.value.sexo == 'masculino') {
-      //@ts-ignore
       let pa = atividadeFisica.masculino.sobrepeso[calc.value.af]
       return ((1086 - (10.1 * calc.value.idade)) +
         (pa * (((13.7 * parseFloat(calc.value.peso)) + (416 * calc.value.altura / 100)))));
     } else if (calc.value.sexo == 'feminino') {
-      //@ts-ignore
       let pa = atividadeFisica.feminino.sobrepeso[calc.value.af]
       return ((448 - (7.95 * calc.value.idade)) + (pa * (((11.4 * parseFloat(calc.value.peso)) + (619 * calc.value.altura / 100)))));
     }

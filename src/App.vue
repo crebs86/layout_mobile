@@ -1,17 +1,13 @@
 <script setup>
-import { onMounted, onUpdated, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { initFlowbite } from 'flowbite';
-import { RouterView, useRouter } from 'vue-router';
+import { RouterView } from 'vue-router';
 import AsideComponent from './components/AsideComponent.vue';
 import { App } from '@capacitor/app'
 import { useRoute } from 'vue-router';
-import has from '@/arrayHelpers'
-import api from '@/api';
-import Cookies from 'js-cookie';
 import { useStore } from 'vuex'
 
 const route = useRoute()
-const router = useRouter()
 const store = useStore();
 const modalAberto = ref(false)
 
