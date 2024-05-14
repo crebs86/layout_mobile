@@ -50,7 +50,7 @@ const router = createRouter({
       beforeEnter: Guard.auth,
     },
     {
-      path: "/Atendimentos/Novo",
+      path: "/Atendimentos/Novo/:id?",
       name: "Novo Atendimento",
       component: () => import("../views/Atendimentos/NovoAtendimento.vue"),
       beforeEnter: Guard.auth,
@@ -66,6 +66,12 @@ const router = createRouter({
       path: "/Atendimentos/Paciente/:id",
       name: "Paciente",
       component: () => import("../views/Atendimentos/Paciente/Paciente.vue"),
+      beforeEnter: Guard.auth,
+    },
+    {
+      path: "/Atendimentos/Paciente/Historico/Ver",
+      name: "Histórico Paciente",
+      component: () => import("../views/Atendimentos/Paciente/HistoricoPaciente.vue"),
       beforeEnter: Guard.auth,
     },
     {

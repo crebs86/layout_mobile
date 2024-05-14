@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue';
 import api from '@/api'
 import { useRoute } from 'vue-router'
-import data from '@/moment';
+import moment from 'moment';
 
 const route = useRoute();
 const edicao = ref(false);
@@ -72,7 +72,7 @@ function resetErros() {
 onMounted(() => {
     api.get('/nutrix/paciente/' + route.params.id)
         .then((r) => {
-            paciente.value = r.data.cliente[0]
+            paciente.value = r.data[0]
         })
         .catch((e) => { })
 
@@ -108,7 +108,7 @@ onMounted(() => {
         <p>
             <span class="font-bold">
                 Data de Nascimento:
-            </span>{{ data(paciente?.dn) }}
+            </span>{{ moment(paciente?.dn).format('DD/MM/YYYY') }}
         </p>
         <p>
             <span class="font-bold">
@@ -117,8 +117,10 @@ onMounted(() => {
         </p>
         <button @click="edicao = true"
             class="m-1.5 px-2 py-1 border rounded-lg shadow-lg bg-yellow-300 hover:bg-yellow-400 text-yellow-900">Editar</button>
-        <button
-            class="m-1.5 px-2 py-1 border rounded-lg shadow-lg bg-green-500 hover:bg-green-400 text-green-200">Atender</button>
+        <RouterLink :to="'/Atendimentos/Novo/' + paciente.id">
+            <button
+                class="m-1.5 px-2 py-1 border rounded-lg shadow-lg bg-green-500 hover:bg-green-400 text-green-200">Atender</button>
+        </RouterLink>
     </div>
     <div class="my-1 p-1.5" v-else>
         <form class="max-w-md mx-auto">
