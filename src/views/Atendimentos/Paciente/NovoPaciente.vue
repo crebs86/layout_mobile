@@ -130,5 +130,4 @@ function resetErros() {
             </button>
         </div>
     </form>
-    {{ erroReposta?.data?.errors }}
 </template>
