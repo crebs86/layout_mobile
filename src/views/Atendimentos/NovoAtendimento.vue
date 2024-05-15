@@ -1,5 +1,5 @@
 <script setup>
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import api from '@/api'
 import moment from 'moment';
@@ -7,6 +7,11 @@ import { useToast } from 'vue-toast-notification';
 import * as smask from "smask";
 
 const $toast = useToast();
+const route = useRoute();
+const router = useRouter();
+const atendimento = ref({
+    evolucao: ''
+})
 
 const calc = ref({
     peso: '',
@@ -60,6 +65,9 @@ const atividadeFisica = {
         }
     }
 }
+
+const paciente = ref({});
+const pacientes = ref([]);
 
 function calcular() {
     resetErros();
@@ -185,22 +193,26 @@ function setClassificacaoImc() {
         return 'Obesidade Grau III'
     }
 }
-const route = useRoute();
-const paciente = ref({});
 
 onMounted(() => {
-    api.get('/nutrix/paciente/' + route.params.id)
-        .then((r) => {
-            paciente.value = r.data
-        })
-        .catch((e) => {
+    if (route.params.id) {
+        api.get('/nutrix/paciente/' + route.params.id)
+            .then((r) => {
+                paciente.value = r.data
+            })
+            .catch((e) => {
 
+            })
+    }else{
+        $toast.warning('Nenhum paciente informado.', {
+            position: 'top-right'
         })
+    }
 })
 
 </script>
 <template>
-    <RouterLink to="/Atendimentos/Paciente/Historico/Ver">
+    <RouterLink to="/Atendimentos/Paciente/Historico/Ver" v-if="!route.params.id">
         <button class="mx-1">
             <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                 width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -211,21 +223,24 @@ onMounted(() => {
             </svg>
         </button>
     </RouterLink>
+
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div>
             <span class="font-bold">Paciente:</span> {{ paciente[0]?.name }}
         </div>
         <div class="flex">
             <div>
-                <span class="font-bold">DN:</span> {{ moment(paciente[0]?.dn).format('DD/MM/YYYY') }}
+                <span class="font-bold">DN:</span>
+                {{ paciente[0]?.dn ? moment(paciente[0]?.dn).format('DD/MM/YYYY') : '' }}
             </div>
             <div class="pl-8">
-                <span class="font-bold">Idade:</span> {{ moment().diff(paciente[0]?.dn, 'years') }} anos
+                <span class="font-bold">Idade:</span>
+                {{ paciente[0]?.dn ? moment().diff(paciente[0]?.dn, 'years') + ' anos' : '' }}
             </div>
         </div>
         <div class="bg-green-300 dark:bg-teal-500 p-0.5 rounded-md">
             <div class="relative z-0 w-full my-5 group">
-                <textarea type="text" name="name" id="name" v-model="paciente.name" rows="10"
+                <textarea type="text" name="name" id="name" v-model="atendimento.evolucao" rows="10"
                     class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                     placeholder=" ">
                 </textarea>
@@ -360,5 +375,40 @@ onMounted(() => {
                 </label>
             </section>
         </div>
+
+        <hr class="my-2">
+        <div class="bg-green-300 dark:bg-teal-500 p-0.5 rounded-md">
+            <section class="grid place-items-center">
+                <label class="w-full">
+                    <input class="peer/showLabel absolute scale-0" type="checkbox" />
+                    <span
+                        class="block max-h-14 overflow-hidden rounded-lg px-4 py-0 shadow-lg transition-all duration-300 peer-checked/showLabel:max-h-[880px]">
+                        <h3 class="flex h-14 cursor-pointer items-center font-bold">Dieta</h3>
+                        <h1>
+                            Calculadora de Estimativa de Necessidade Energética 19 anos ou Mais
+                        </h1>
+
+                    </span>
+                </label>
+            </section>
+        </div>
+
+        <hr class="my-2">
+        <div class="bg-green-300 dark:bg-teal-500 p-0.5 rounded-md">
+            <section class="grid place-items-center">
+                <label class="w-full">
+                    <input class="peer/showLabel absolute scale-0" type="checkbox" />
+                    <span
+                        class="block max-h-14 overflow-hidden rounded-lg px-4 py-0 shadow-lg transition-all duration-300 peer-checked/showLabel:max-h-[880px]">
+                        <h3 class="flex h-14 cursor-pointer items-center font-bold">Prescrição</h3>
+                        <h1>
+                            Prescrição
+                        </h1>
+
+                    </span>
+                </label>
+            </section>
+        </div>
+
     </div>
 </template>

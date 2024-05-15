@@ -7,22 +7,21 @@ export default {
     if (!ses_token || ses_token == "undefined") {
       next("/login");
     }
-
+    console.log('check login')
     try {
       api
         .get("/check")
         .then((r) => {
-          console.log("api then App", r.data === 1);
+          //console.log("api then App", r.data === 1);
           next();
         })
         .catch(() => {
-          console.log(".catch redirect /login");
+          //console.log(".catch redirect /login");
           Cookie.remove("ses_token");
           next("/login");
-          ("");
         });
     } catch (e) {
-      console.log("catch redirect /login");
+      //console.log("catch redirect /login");
       Cookie.remove("ses_token");
       next("/login");
     }

@@ -1,10 +1,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '@/api'
-import { useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import moment from 'moment';
+import { useToast } from 'vue-toast-notification';
 
 const route = useRoute();
+const router = useRouter();
+const $toast = useToast()
 const edicao = ref(false);
 
 
@@ -32,11 +35,18 @@ function salvarPaciente() {
     } else {
         api.post('/nutrix/paciente/atualizarCliente/' + paciente.value.id, paciente.value)
             .then((r) => {
-                route.push('/Atendimentos/Paciente/' + r.data.cliente.id)
+                console.log(r.data.cliente.id)
+                router.push('/Atendimentos/Paciente/' + r.data.cliente.id)
+                $toast.success('Paciente editado com sucesso.', {
+                    position: 'top-right'
+                })
             })
             .catch((e) => {
-                console.log(e.response)
+                console.log(e)
                 erroReposta.value = e.response
+                $toast.error('Erro ao editar paciente.', {
+                    position: 'top-right'
+                })
             })
     }
 }
