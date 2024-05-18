@@ -1,15 +1,17 @@
 <script setup>
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { onMounted, ref } from 'vue';
 import api from '@/api'
 import moment from 'moment';
 import { useToast } from 'vue-toast-notification';
 import * as smask from "smask";
+import { useStore } from 'vuex';
 
 const $toast = useToast();
 const route = useRoute();
-const router = useRouter();
+const store = useStore();
 const atendimento = ref({
+    id: '',
     evolucao: ''
 })
 
@@ -67,7 +69,7 @@ const atividadeFisica = {
 }
 
 const paciente = ref({});
-const pacientes = ref([]);
+const atd = ref(null);
 
 function calcular() {
     resetErros();
@@ -194,16 +196,51 @@ function setClassificacaoImc() {
     }
 }
 
+function salvarRascunhoAtendimento() {
+    let pct = {
+        id: atd.value.id,
+        atendimento: atendimento.value,
+        calc: calc.value
+    }
+
+    store.commit('removeAtendimento', pct.id)
+    store.commit('storeAtendimento', pct)
+
+    api.post('/nutrix/paciente/salvarEvolucaoRascunho/' + atd.value.id, pct)
+        .then((r) => {
+            $toast.success('Rascunho salvo.', {
+                position: 'top-right'
+            })
+        })
+        .catch(() => {
+            $toast.error('Erro ao salvar rascunho em nuvem.', {
+                position: 'top-right'
+            })
+        })
+}
+
 onMounted(() => {
     if (route.params.id) {
-        api.get('/nutrix/paciente/' + route.params.id)
+        api.get('/nutrix/paciente/novoAtendimento/' + route.params.id)
             .then((r) => {
-                paciente.value = r.data
+                paciente.value = r.data.cliente
+                atd.value = r.data.atendimento
+                calc.value.idade = moment().diff(r.data.cliente.dn, 'years')
+
+                calc.value.peso = r.data.atendimento.peso
+                calc.value.altura = r.data.atendimento.altura
+                calc.value.imc = r.data.atendimento.imc
+                calc.value.af = r.data.atendimento.atividade_fisica
+                calc.value.sexo = r.data.atendimento.sexo
+                calc.value.kcal = r.data.atendimento.kcal
+
+                atendimento.value.evolucao = r.data.atendimento.evolucao
+
             })
             .catch((e) => {
 
             })
-    }else{
+    } else {
         $toast.warning('Nenhum paciente informado.', {
             position: 'top-right'
         })
@@ -226,35 +263,44 @@ onMounted(() => {
 
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <div>
-            <span class="font-bold">Paciente:</span> {{ paciente[0]?.name }}
+            <span class="font-bold ml-1.5">Paciente:</span> {{ paciente?.name }}
         </div>
-        <div class="flex">
+        <div class="flex ml-1.5">
             <div>
                 <span class="font-bold">DN:</span>
-                {{ paciente[0]?.dn ? moment(paciente[0]?.dn).format('DD/MM/YYYY') : '' }}
+                {{ paciente?.dn ? moment(paciente?.dn).format('DD/MM/YYYY') : '' }}
             </div>
             <div class="pl-8">
                 <span class="font-bold">Idade:</span>
-                {{ paciente[0]?.dn ? moment().diff(paciente[0]?.dn, 'years') + ' anos' : '' }}
+                {{ paciente?.dn ? moment().diff(paciente?.dn, 'years') + ' anos' : '' }}
+            </div>
+            <div class="pl-8">
+                <span class="font-bold">Atendimento:</span>
+                {{ atd?.id }}
             </div>
         </div>
+
+        <hr class="my-2">
         <div class="bg-green-300 dark:bg-teal-500 p-0.5 rounded-md">
-            <div class="relative z-0 w-full my-5 group">
-                <textarea type="text" name="name" id="name" v-model="atendimento.evolucao" rows="10"
-                    class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-                    placeholder=" ">
-                </textarea>
-                <label for="name"
-                    class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-300 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-gray-300 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-                    Evolução
+            <section class="grid place-items-center">
+                <label class="w-full">
+                    <input class="peer/showLabel absolute scale-0" type="checkbox" />
+                    <span
+                        class="block max-h-14 overflow-hidden rounded-lg px-4 py-0 shadow-lg transition-all duration-300 peer-checked/showLabel:max-h-[880px]">
+                        <h3 class="flex h-14 cursor-pointer items-center font-bold">Evolução</h3>
+                        <div class="bg-green-300 dark:bg-teal-400 rounded-md">
+                            <div class="relative z-0 w-full my-5 group">
+                                <textarea type="text" name="name" id="name" v-model="atendimento.evolucao" rows="10"
+                                    class="bg-green-200  dark:bg-teal-400 block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-gray-300 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                                    placeholder=" ">
+                                </textarea>
+                            </div>
+                        </div>
+                    </span>
                 </label>
-                <!--small class="text-xs text-red-600" v-if="erros.name">*Campo Obrigatório</!--small>
-                <small-- class="text-xs text-red-600" v-for="(erro, i) in erroReposta?.data?.errors?.name"
-                    :key="i + 'name'">
-                    {{ erro }}
-                </small-->
-            </div>
+            </section>
         </div>
+
         <hr class="my-2">
         <div class="bg-green-300 dark:bg-teal-500 p-0.5 rounded-md">
             <section class="grid place-items-center">
@@ -281,6 +327,7 @@ onMounted(() => {
                                 Altura (centimetros)
                             </label>
                             <input inputmode="numeric" @input="inputs" maxlength="3" data-tipo="altura"
+                                v-model="calc.altura"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                             <small class="text-red-700" v-if="erros.altura">Informe a altura centímetros</small>
                         </div>
@@ -289,8 +336,9 @@ onMounted(() => {
                             <label for="peso" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                 Idade (anos)
                             </label>
-                            <input inputmode="numeric" @input="inputs" maxlength="2" data-tipo="idade"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            <input type="number" maxlength="2" data-tipo="idade" v-model="calc.idade"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-teal-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                readonly />
                             <small class="text-red-700" v-if="erros.idade">Informe a idade em anos</small>
                         </div>
 
@@ -410,5 +458,15 @@ onMounted(() => {
             </section>
         </div>
 
+        <button type="button" @click.prevent="salvarRascunhoAtendimento"
+            class="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 my-2 max-w-96 ml-4">
+            Salvar Rascunho do Atendimento
+        </button>
+
+        <button type="button" @click.prevent=""
+            class="text-white bg-gradient-to-r from-emerald-400 to-emerald-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 max-w-96 -mt-2">
+            Finalizar Atendimento
+        </button>
+        {{ store.state.atendimentos }}
     </div>
 </template>
